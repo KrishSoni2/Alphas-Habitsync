@@ -7,7 +7,5 @@ matplotlib
 numpy
 pydeck
 requests
-validators
 plotly
-seaborn
 scikit-learn

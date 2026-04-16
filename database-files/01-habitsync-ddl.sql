@@ -1,0 +1,180 @@
+-- Krish Soni
+-- HabitSync DDL - creates all tables
+
+CREATE DATABASE IF NOT EXISTS HabitSync;
+USE HabitSync;
+
+-- Drop tables in reverse dependency order
+DROP TABLE IF EXISTS AI_RECOMMENDATIONS;
+DROP TABLE IF EXISTS FLAGGED_CONTENT;
+DROP TABLE IF EXISTS NOTES;
+DROP TABLE IF EXISTS GROUP_HABITS;
+DROP TABLE IF EXISTS GROUP_MEMBERS;
+DROP TABLE IF EXISTS HABIT_GROUPS;
+DROP TABLE IF EXISTS GOALS;
+DROP TABLE IF EXISTS STREAKS;
+DROP TABLE IF EXISTS HABIT_LOGS;
+DROP TABLE IF EXISTS HABIT_SCHEDULE;
+DROP TABLE IF EXISTS HABITS;
+DROP TABLE IF EXISTS CATEGORIES;
+DROP TABLE IF EXISTS USERS;
+
+-- USERS
+CREATE TABLE USERS (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255),
+    role VARCHAR(20) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CATEGORIES
+CREATE TABLE CATEGORIES (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- HABITS
+CREATE TABLE HABITS (
+    habit_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    category_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    frequency VARCHAR(20) NOT NULL,
+    daily_goal INT DEFAULT 1,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    is_default BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (category_id) REFERENCES CATEGORIES(category_id)
+);
+
+-- HABIT_SCHEDULE
+CREATE TABLE HABIT_SCHEDULE (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY,
+    habit_id INT NOT NULL,
+    day_of_week VARCHAR(10) NOT NULL,
+    FOREIGN KEY (habit_id) REFERENCES HABITS(habit_id)
+);
+
+-- HABIT_LOGS
+CREATE TABLE HABIT_LOGS (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    habit_id INT NOT NULL,
+    user_id INT NOT NULL,
+    completed_at DATETIME NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    FOREIGN KEY (habit_id) REFERENCES HABITS(habit_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+);
+
+-- STREAKS
+CREATE TABLE STREAKS (
+    streak_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    habit_id INT NOT NULL,
+    current_streak INT DEFAULT 0,
+    longest_streak INT DEFAULT 0,
+    last_logged_date DATE,
+    UNIQUE KEY uq_streak_user_habit (user_id, habit_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (habit_id) REFERENCES HABITS(habit_id)
+);
+
+-- GOALS
+CREATE TABLE GOALS (
+    goal_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    goal_type VARCHAR(20) NOT NULL,
+    target_value INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+);
+
+-- HABIT_GROUPS
+CREATE TABLE HABIT_GROUPS (
+    group_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    creator_id INT NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT TRUE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (creator_id) REFERENCES USERS(user_id)
+);
+
+-- GROUP_MEMBERS
+CREATE TABLE GROUP_MEMBERS (
+    group_member_id INT AUTO_INCREMENT PRIMARY KEY,
+    group_id INT NOT NULL,
+    user_id INT NOT NULL,
+    role VARCHAR(20) NOT NULL,
+    joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    UNIQUE KEY uq_group_member (group_id, user_id),
+    FOREIGN KEY (group_id) REFERENCES HABIT_GROUPS(group_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+);
+
+-- GROUP_HABITS
+CREATE TABLE GROUP_HABITS (
+    group_habit_id INT AUTO_INCREMENT PRIMARY KEY,
+    group_id INT NOT NULL,
+    habit_id INT NOT NULL,
+    assigned_by INT NOT NULL,
+    assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_group_habit (group_id, habit_id),
+    FOREIGN KEY (group_id) REFERENCES HABIT_GROUPS(group_id),
+    FOREIGN KEY (habit_id) REFERENCES HABITS(habit_id),
+    FOREIGN KEY (assigned_by) REFERENCES USERS(user_id)
+);
+
+-- NOTES
+CREATE TABLE NOTES (
+    note_id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    group_id INT,
+    message TEXT NOT NULL,
+    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (receiver_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (group_id) REFERENCES HABIT_GROUPS(group_id)
+);
+
+-- FLAGGED_CONTENT
+CREATE TABLE FLAGGED_CONTENT (
+    flag_id INT AUTO_INCREMENT PRIMARY KEY,
+    content_type VARCHAR(50) NOT NULL,
+    content_id INT NOT NULL,
+    reported_by INT NOT NULL,
+    reason TEXT,
+    status VARCHAR(20) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    resolved_at DATETIME,
+    FOREIGN KEY (reported_by) REFERENCES USERS(user_id)
+);
+
+-- AI_RECOMMENDATIONS
+CREATE TABLE AI_RECOMMENDATIONS (
+    recommendation_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    habit_id INT NOT NULL,
+    recommendation_text TEXT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id),
+    FOREIGN KEY (habit_id) REFERENCES HABITS(habit_id)
+);

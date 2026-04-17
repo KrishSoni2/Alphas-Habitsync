@@ -11,6 +11,7 @@ API_BASE = "http://web-api:4000"
 # Show sidebar links
 SideBarLinks(show_home=True)
 
+st.image('assets/HabitSync Logo.png', width=250)
 st.title('HabitSync')
 st.subheader('Your Habit Tracking Companion')
 st.write('')

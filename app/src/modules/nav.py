@@ -106,6 +106,8 @@ def PlatformGrowthNav():
 
 def SideBarLinks(show_home=False):
     """Show sidebar links based on the logged-in user's role."""
+    st.sidebar.image('assets/HabitSync Logo.png', width=180)
+
     if show_home:
         HomeNav()
 

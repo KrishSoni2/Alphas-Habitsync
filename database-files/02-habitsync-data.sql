@@ -44,7 +44,7 @@ INSERT INTO USERS (first_name, last_name, email, password_hash, role, is_active,
 ('Emma', 'Green', 'emma.g@example.com', 'hash35', 'everyday_user', TRUE, '2026-03-28 11:00:00');
 
 -- =============================================================
--- CATEGORIES (6 rows)
+-- CATEGORIES (12 rows)
 -- =============================================================
 INSERT INTO CATEGORIES (name, description) VALUES
 ('Health', 'Habits related to physical wellness and nutrition'),
@@ -52,7 +52,13 @@ INSERT INTO CATEGORIES (name, description) VALUES
 ('Personal', 'Habits related to self-improvement and lifestyle'),
 ('Fitness', 'Habits related to exercise and physical activity'),
 ('Mindfulness', 'Habits related to meditation and mental wellness'),
-('Productivity', 'Habits related to work efficiency and time management');
+('Productivity', 'Habits related to work efficiency and time management'),
+('Social', 'Habits related to relationships and community'),
+('Creative', 'Habits related to art, writing, and creative expression'),
+('Financial', 'Habits related to budgeting and financial wellness'),
+('Environmental', 'Habits related to sustainability and eco-friendly living'),
+('Learning', 'Habits related to skill-building and continuous education'),
+('Home', 'Habits related to household chores and organization');
 
 -- =============================================================
 -- HABITS (40 rows)
@@ -198,7 +204,7 @@ INSERT INTO HABIT_LOGS (habit_id, user_id, completed_at, status) VALUES
 (1, 1, '2026-04-10 07:30:00', 'completed'), (4, 1, '2026-04-10 07:00:00', 'completed');
 
 -- =============================================================
--- STREAKS (40 rows)
+-- STREAKS (65 rows)
 -- =============================================================
 INSERT INTO STREAKS (user_id, habit_id, current_streak, longest_streak, last_logged_date) VALUES
 (1, 1, 12, 20, '2026-04-10'), (1, 2, 5, 10, '2026-04-01'), (1, 3, 8, 15, '2026-04-02'),
@@ -219,7 +225,20 @@ INSERT INTO STREAKS (user_id, habit_id, current_streak, longest_streak, last_log
 (21, 34, 2, 3, '2026-03-16'), (21, 35, 1, 2, '2026-03-15'),
 (22, 36, 1, 1, '2026-03-18'), (23, 37, 2, 3, '2026-03-21'),
 (24, 38, 2, 2, '2026-03-23'), (25, 39, 1, 1, '2026-03-25'),
-(26, 40, 2, 2, '2026-03-29');
+(26, 40, 2, 2, '2026-03-29'),
+(5, 1, 6, 11, '2026-04-08'), (5, 4, 4, 9, '2026-04-07'),
+(6, 1, 8, 14, '2026-04-10'), (6, 4, 5, 10, '2026-04-09'),
+(7, 1, 3, 7, '2026-04-05'), (7, 4, 2, 6, '2026-04-04'),
+(12, 2, 4, 8, '2026-04-01'), (13, 1, 9, 16, '2026-04-10'),
+(13, 4, 6, 12, '2026-04-08'), (18, 3, 5, 11, '2026-04-06'),
+(19, 18, 7, 13, '2026-04-10'), (20, 28, 4, 8, '2026-04-07'),
+(21, 5, 3, 6, '2026-04-05'), (22, 8, 5, 10, '2026-04-08'),
+(25, 1, 2, 4, '2026-04-03'), (26, 15, 3, 5, '2026-04-05'),
+(27, 4, 4, 7, '2026-04-06'), (28, 11, 2, 3, '2026-04-04'),
+(29, 29, 6, 11, '2026-04-09'), (30, 7, 3, 5, '2026-04-06'),
+(31, 40, 2, 4, '2026-04-07'), (14, 16, 5, 9, '2026-04-08'),
+(15, 39, 2, 3, '2026-04-02'), (16, 37, 4, 7, '2026-04-07'),
+(17, 28, 3, 6, '2026-04-05');
 
 -- =============================================================
 -- GOALS (50 rows)
@@ -444,7 +463,7 @@ INSERT INTO NOTES (sender_id, receiver_id, group_id, message, sent_at) VALUES
 (8, 12, 27, 'Keep the study group momentum going!', '2026-04-14 14:30:00');
 
 -- =============================================================
--- FLAGGED_CONTENT (30 rows)
+-- FLAGGED_CONTENT (55 rows)
 -- =============================================================
 INSERT INTO FLAGGED_CONTENT (content_type, content_id, reported_by, reason, status, created_at, resolved_at) VALUES
 ('group_name', 1, 3, 'Potentially inappropriate title', 'open', '2026-02-01 10:00:00', NULL),
@@ -476,7 +495,31 @@ INSERT INTO FLAGGED_CONTENT (content_type, content_id, reported_by, reason, stat
 ('habit_description', 28, 3, 'Contains incorrect info', 'open', '2026-04-07 09:00:00', NULL),
 ('group_description', 30, 10, 'Inactive group needs cleanup', 'open', '2026-04-09 12:00:00', NULL),
 ('habit_name', 38, 3, 'Too similar to another habit', 'resolved', '2026-04-10 14:00:00', '2026-04-12 10:00:00'),
-('group_name', 30, 10, 'Group appears to be inactive', 'open', '2026-04-13 11:00:00', NULL);
+('group_name', 30, 10, 'Group appears to be inactive', 'open', '2026-04-13 11:00:00', NULL),
+('habit_description', 14, 3, 'Contains unclear instructions', 'open', '2026-03-02 09:00:00', NULL),
+('group_name', 6, 10, 'Name may be misleading', 'reviewed', '2026-03-04 10:00:00', NULL),
+('habit_name', 7, 3, 'Trademark concern', 'resolved', '2026-03-06 11:00:00', '2026-03-08 09:00:00'),
+('group_description', 11, 10, 'Mentions specific products', 'open', '2026-03-09 14:00:00', NULL),
+('habit_description', 31, 3, 'Could cause injury without guidance', 'reviewed', '2026-03-11 10:00:00', NULL),
+('group_name', 14, 10, 'Similar to existing group name', 'resolved', '2026-03-13 12:00:00', '2026-03-15 11:00:00'),
+('habit_name', 27, 3, 'Name is not descriptive enough', 'open', '2026-03-17 09:00:00', NULL),
+('group_description', 17, 10, 'Content feels like marketing', 'open', '2026-03-19 14:00:00', NULL),
+('habit_description', 40, 3, 'Could be more specific', 'reviewed', '2026-03-21 10:00:00', NULL),
+('group_name', 19, 10, 'Possibly inappropriate tone', 'open', '2026-03-24 11:00:00', NULL),
+('habit_name', 16, 3, 'Overlaps with default habit', 'resolved', '2026-03-26 13:00:00', '2026-03-28 10:00:00'),
+('group_description', 21, 10, 'Description is too short', 'reviewed', '2026-03-29 09:00:00', NULL),
+('habit_description', 11, 3, 'Missing time expectations', 'open', '2026-03-31 10:00:00', NULL),
+('group_name', 23, 10, 'May discourage rest days', 'open', '2026-04-02 13:00:00', NULL),
+('habit_name', 33, 3, 'Could be combined with similar habit', 'reviewed', '2026-04-04 11:00:00', NULL),
+('group_description', 25, 10, 'Lacks clear purpose statement', 'open', '2026-04-06 10:00:00', NULL),
+('habit_description', 19, 3, 'References unverified benefits', 'resolved', '2026-04-08 12:00:00', '2026-04-10 09:00:00'),
+('group_name', 27, 10, 'Name is too similar to Academic Excellence', 'open', '2026-04-11 11:00:00', NULL),
+('habit_name', 24, 3, 'Activity requires equipment not mentioned', 'reviewed', '2026-04-12 10:00:00', NULL),
+('group_description', 9, 10, 'Could add clearer group rules', 'open', '2026-04-13 14:00:00', NULL),
+('habit_description', 36, 3, 'Difficulty level unclear', 'open', '2026-04-14 09:00:00', NULL),
+('group_name', 11, 10, 'Name needs minor revision', 'resolved', '2026-04-14 11:00:00', '2026-04-15 10:00:00'),
+('habit_name', 6, 3, 'Supplement advice needs disclaimer', 'open', '2026-04-15 12:00:00', NULL),
+('group_description', 13, 10, 'Could promote healthier framing', 'reviewed', '2026-04-15 13:00:00', NULL);
 
 -- =============================================================
 -- AI_RECOMMENDATIONS (50 rows)

@@ -63,3 +63,40 @@ The database is seeded from the SQL files in `database-files/` the first time th
 docker compose down -v
 docker compose up -d
 ```
+
+### Using the app
+
+Open http://localhost:8501. The landing page has a dropdown for each of the four personas — pick a user and click Login. There's no real authentication; selecting a user simulates them being signed in.
+
+## Project Structure
+
+```
+app/src/
+  Home.py           Landing page with persona selector
+  pages/                16 feature pages (4 per persona)
+  modules/nav.py        Persona-aware sidebar nav
+api/backend/
+  habits/               Habit tracking, logs, streaks, goals
+  groups/               Accountability groups, members, notes
+  admin/                Categories, flagged content, user mgmt
+  analytics/            Platform-wide analytics
+  rest_entry.py         Registers all four blueprints
+database-files/         DDL + mock data (runs on container init)
+docker-compose.yaml     Service orchestration
+```
+
+## Features
+
+HabitSync has four personas, each with a home page and three feature pages.
+
+**Everyday User** — create custom habits, mark them complete, view streaks and completion history, set daily and weekly goals, and join accountability groups with friends.
+
+**Wellness Coach** — create and manage accountability groups, assign habits to members, track each member's completion rate and streak status, send motivational notes, and review weekly group summaries.
+
+**System Administrator** — manage the platform's habit categories and default suggested habits, review and resolve flagged content, monitor platform-wide metrics (users, daily active, habits logged, groups), and activate or deactivate user accounts.
+
+**Data Analyst** — view completion trends broken down by category, compare retention between group members and solo users, analyze time-of-day activity heatmaps, and track user growth over time.
+
+## REST API
+
+The backend exposes 40 routes across four blueprints (`habits`, `groups`, `admin`, `analytics`). The full REST API matrix — with user story mappings — is in the Phase 3 submission document.

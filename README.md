@@ -2,6 +2,9 @@
 
 HabitSync is a habit tracking platform built to help people build consistent routines, join accountability groups, and see patterns in their progress over time. The platform also supports coaches who manage groups, admins who keep the platform healthy, and analysts who study what drives retention.
 
+#Video Pitch Link: 
+https://drive.google.com/file/d/1e6KdRYXF8YY15-K2bmTY_YFVMIaS4qen/view?usp=sharing
+
 ## The Team
 
 The Alphas:
